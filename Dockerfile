@@ -5,21 +5,29 @@
 # Build stage - use Flutter base image
 FROM dart:3.7.0 AS builder
 
-# Install Flutter
-RUN git clone https://github.com/flutter/flutter.git --depth 1 --branch stable /opt/flutter
-ENV PATH="/opt/flutter/bin:$PATH"
+# Install Flutter (don't run as root)
+RUN useradd -m -s /bin/bash builder && \
+    mkdir /opt/flutter && \
+    chown builder:builder /opt/flutter
 
-RUN flutter config set --stable && \
+USER builder
+WORKDIR /opt/flutter
+
+# Clone and setup Flutter
+RUN git clone https://github.com/flutter/flutter.git --depth 1 --branch stable . && \
     flutter precache --web
 
-WORKDIR /app
+ENV PATH="/opt/flutter/bin:$PATH"
 
-COPY pubspec.yaml ./
+# Go back to app directory
+WORKDIR /app
+COPY --chown=builder:builder pubspec.yaml ./
+
+# Get dependencies and build
 RUN flutter pub get
 
-COPY lib/ ./lib/
+COPY --chown=builder:builder lib/ ./lib/
 
-# Build Flutter web WITHOUT copying assets (assets folder is empty anyway)
 RUN flutter build web \
     --release \
     --tree-shake-icons \
