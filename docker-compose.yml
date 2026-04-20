@@ -1,0 +1,78 @@
+# =============================================================================
+# Crypto Mecca Wallet - Docker Compose
+# =============================================================================
+# Deploys: Flutter Web App + Nginx + Optional Services
+# 
+# Usage:
+#   docker-compose up -d              # Production (recommended)
+#   docker-compose -f docker-compose.yml up -d
+#   docker-compose down             # Stop
+#   docker-compose logs -f           # View logs
+#
+# Ports:
+#   - Web App: http://localhost:3000
+#   - Domain: cal.zerodayinstitute.com (after DNS config)
+# =============================================================================
+
+services:
+  # =============================================================================
+  # CRYPTO MECCA WALLET - Flutter Web Application
+  # =============================================================================
+  crypto-mecca:
+    container_name: crypto-mecca-wallet
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    restart: unless-stopped
+    ports:
+      - "3000:3000"    # Coolify default port
+      - "8080:8080"    # Alternative port
+    environment:
+      - NODE_ENV=production
+      - FLUTTER_WEB_USE_SKIA=true
+    healthcheck:
+      test: ["CMD", "python3", "/usr/local/bin/health_check.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - crypto-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # =============================================================================
+  # OPTIONAL: Traefik Reverse Proxy (uncomment if using standalone)
+  # =============================================================================
+  # traefik:
+  #   image: traefik:v3.0
+  #   container_name: crypto-mecca-traefik
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #     - "8080:8080"  # Traefik dashboard
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+  #     - ./traefik/certs:/etc/traefik/certs:ro
+  #   networks:
+  #     - crypto-network
+  #   depends_on:
+  #     - crypto-mecca
+
+networks:
+  crypto-network:
+    driver: bridge
+    name: crypto-mecca-network
+
+# =============================================================================
+# VOLUMES (for persistent data if needed)
+# =============================================================================
+# volumes:
+#   crypto-data:
+#     name: crypto-mecca-data

@@ -1,0 +1,77 @@
+# =============================================================================
+# Crypto Mecca Wallet - Nixpacks Configuration
+# =============================================================================
+# Used by Coolify to build and deploy the Flutter application
+# No Dockerfile needed when using Nixpacks!
+# =============================================================================
+
+[build]
+# Nixpacks build plan
+build_plan = '''
+(flutter 
+  { version = "3.24.0" 
+  ; channel = "stable"
+  }
+)
+'''
+
+# Install dependencies
+[nixpacks]
+packages = [
+    "flutter",
+    "dart",
+    "clang",
+    "cmake",
+    "ninja-build",
+    "pkg-config",
+    "libgtk-3-dev",
+    "curl",
+    "git"
+]
+
+# Start command - serves the built web app
+start_cmd = "flutter run --release"
+
+# Port to expose (Nixpacks/Coolify uses this)
+[env]
+PORT = "3000"
+FLUTTER_WEB_USE_SKIA = "true"
+
+# =============================================================================
+# ALTERNATIVE: Static Build (if not using Dockerfile)
+# =============================================================================
+# If using Nixpacks instead of Dockerfile, create a static file server:
+#
+# [metadata]
+# name = "Crypto Mecca Wallet"
+# description = "Enterprise Crypto Wallet"
+# 
+# [phases.build]
+# command = '''
+# cd /project
+# flutter pub get
+# flutter build web --release --tree-shake-icons
+# '''
+# 
+# [phases.start]
+# command = '''
+# cd /project/build/web
+# npx -y serve -l 3000
+# '''
+# =============================================================================
+
+# =============================================================================
+# IMPORTANT: For Coolify Deployment
+# =============================================================================
+# 
+# OPTION 1: Use Dockerfile (RECOMMENDED)
+# - Dockerfile is already in the repo
+# - Build Pack: Select "Dockerfile" in Coolify
+#
+# OPTION 2: Use Nixpacks
+# - Delete or rename Dockerfile
+# - Build Pack: Select "Nixpacks" in Coolify
+# - This nixpacks.toml will be used automatically
+#
+# We recommend using Dockerfile for better control!
+# =============================================================================

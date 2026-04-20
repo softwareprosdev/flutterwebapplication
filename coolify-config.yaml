@@ -1,0 +1,53 @@
+# =============================================================================
+# Coolify Application Configuration
+# =============================================================================
+# Copy this to your Coolify app settings or use as reference
+# =============================================================================
+
+# Application Name
+app-name: crypto-mecca-wallet
+
+# Version
+version: 1.0.0
+
+# Build Pack
+build_pack: Dockerfile
+
+# Docker
+docker:
+  # Use multi-stage Dockerfile
+  file: Dockerfile
+  
+  # Pre-build arguments
+  arguments:
+    FLUTTER_VERSION: "3.24.0"
+
+# Ports
+exposed_port: 3000
+
+# Health Check
+health_check:
+  path: /health
+  port: 3000
+  interval: 30
+  timeout: 10
+  start_period: 30
+
+# Environment Variables
+environment:
+  - key: NODE_ENV
+    value: production
+  - key: FLUTTER_WEB_USE_SKIA
+    value: "true"
+
+# Domain Configuration (add after initial deployment)
+# domains:
+#   - hostname: cal.zerodayinstitute.com
+#     https: true
+#     force_https: true
+
+# Deployment Hook (GitHub Actions triggers this)
+# webhooks:
+#   deployment:
+#     url: https://panel.softwarepros.org/api/v1/deployments/...
+#     method: POST
