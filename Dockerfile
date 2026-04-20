@@ -1,53 +1,36 @@
 # =============================================================================
-# Crypto Mecca Wallet - Production Dockerfile (Fixed)
+# Crypto Mecca Wallet - Production Dockerfile (Optimized)
+# Builds Flutter, serves with Nginx - no root, cached dependencies
 # =============================================================================
 
-# Build stage - use Flutter base image
-FROM dart:3.7.0 AS builder
+# Build stage
+FROM ghcr.io/cirruslabs/flutter:stable AS build
 
-# Install Flutter (don't run as root)
-RUN useradd -m -s /bin/bash builder && \
-    mkdir /opt/flutter && \
-    chown builder:builder /opt/flutter
-
-USER builder
-WORKDIR /opt/flutter
-
-# Clone and setup Flutter
-RUN git clone https://github.com/flutter/flutter.git --depth 1 --branch stable . && \
-    flutter precache --web
-
-ENV PATH="/opt/flutter/bin:$PATH"
-
-# Go back to app directory
 WORKDIR /app
-COPY --chown=builder:builder pubspec.yaml ./
 
-# Get dependencies and build
+# Copy pubspec first for dependency caching
+COPY pubspec.* ./
 RUN flutter pub get
 
-COPY --chown=builder:builder lib/ ./lib/
+# Copy full project
+COPY . .
 
-RUN flutter build web \
-    --release \
-    --tree-shake-icons \
-    --wasm \
-    --web-renderer skwasm \
-    --no-source-maps
+# Production web build
+RUN flutter build web --release \
+    --dart-define=FLUTTER_WEB_USE_SKIA=false
 
-# Production stage
-FROM nginx:1.25-alpine AS production
+# Runtime stage - minimal Nginx only
+FROM nginx:1.27-alpine
 
-RUN apk add --no-cache python3
+# Remove default nginx site
+RUN rm -rf /usr/share/nginx/html/*
 
-COPY --from=builder /app/build/web /usr/share/nginx/html
+# Copy build output
+COPY --from=build /app/build/web /usr/share/nginx/html
 
-COPY default.conf /etc/nginx/conf.d/default.conf
+# Copy nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-RUN chmod -R 755 /usr/share/nginx/html && \
-    chmod +x /usr/local/bin/*
-
-# Support both Coolify ports
-EXPOSE 3000 8080
+EXPOSE 80 3000
 
 CMD ["nginx", "-g", "daemon off;"]
