@@ -19,12 +19,7 @@ RUN flutter pub get
 
 COPY lib/ ./lib/
 
-# Create assets directory if it doesn't exist (even if empty)
-RUN mkdir -p assets/fonts assets/images && \
-    touch assets/fonts/.gitkeep assets/images/.gitkeep
-
-COPY assets/ ./assets/
-
+# Build Flutter web WITHOUT copying assets (assets folder is empty anyway)
 RUN flutter build web \
     --release \
     --tree-shake-icons \
