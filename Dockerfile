@@ -12,6 +12,9 @@ WORKDIR /app
 COPY pubspec.* ./
 RUN flutter pub get
 
+# Enable web platform and create web config
+RUN flutter create . --platforms web
+
 # Copy full project
 COPY . .
 
