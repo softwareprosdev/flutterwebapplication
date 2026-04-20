@@ -280,6 +280,33 @@
     .balance-value { font-size: 36px; font-weight: 700; color: #FFFFFF; margin: 8px 0; }
     .balance-locked { font-size: 12px; color: #FFB020; }
     .wallets-title, .mining-title, .news-title, .products-title { font-size: 14px; font-weight: 600; color: #94A3B8; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .shop-header { margin-bottom: 20px; }
+    .shop-title { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+    .shop-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .filter-btn { padding: 8px 16px; background: #0B1020; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; color: #94A3B8; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+    .filter-btn:hover { border-color: #00E5FF; color: #00E5FF; }
+    .filter-btn.active { background: #00E5FF; border-color: #00E5FF; color: #05070D; font-weight: 600; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .product-card { background: #0B1020; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; transition: all 0.3s; position: relative; }
+    .product-card:hover { transform: translateY(-4px); border-color: rgba(0,229,255,0.5); box-shadow: 0 8px 32px rgba(0,229,255,0.15); }
+    .product-card.hidden { display: none; }
+    .product-badge { position: absolute; top: 12px; left: 12px; padding: 4px 10px; background: linear-gradient(135deg, #00E5FF, #00B8D4); color: #05070D; font-size: 10px; font-weight: 700; border-radius: 4px; text-transform: uppercase; }
+    .product-image-container { height: 160px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1A1F35, #0B1020); padding: 20px; }
+    .product-image { width: 80px; height: 80px; color: #00E5FF; }
+    .product-info { padding: 16px; }
+    .product-brand { font-size: 11px; color: #00E5FF; text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
+    .product-name { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+    .product-specs { display: flex; gap: 12px; margin-bottom: 12px; }
+    .spec { font-size: 12px; color: #94A3B8; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; }
+    .product-price { font-size: 22px; font-weight: 700; color: #00E5FF; margin-bottom: 8px; }
+    .price-unit { font-size: 12px; font-weight: 400; color: #64748B; }
+    .product-stock { font-size: 11px; font-weight: 600; margin-bottom: 12px; }
+    .product-stock.in-stock { color: #00FF88; }
+    .product-stock.low-stock { color: #FFB020; }
+    .product-stock.out-stock { color: #FF4757; }
+    .btn-shop { width: 100%; padding: 12px; background: linear-gradient(135deg, #00E5FF, #00B8D4); border: none; border-radius: 8px; color: #05070D; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-shop:hover { opacity: 0.9; transform: translateY(-1px); }
+    .shop-disclaimer { display: flex; align-items: center; gap: 8px; padding: 16px; background: rgba(255,176,32,0.1); border: 1px solid rgba(255,176,32,0.3); border-radius: 12px; margin-top: 24px; font-size: 12px; color: #FFB020; }
     .wallet-row { display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; }
     .wallet-row:hover { border-color: rgba(0,229,255,0.5); }
     .wallet-row.active { border-color: #00E5FF; background: rgba(0,229,255,0.1); }
@@ -870,80 +897,205 @@
           </div>
         </div>
         <div class="tab" id="tab-shop">
-          <div class="products-title">Top Mining Hardware</div>
-          <div class="card shop-card">
-            <div class="product-image">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/></svg>
+          <div class="shop-header">
+            <div class="shop-title">Mining Equipment</div>
+            <div class="shop-filters">
+              <button class="filter-btn active" onclick="filterShop('all', this)">All</button>
+              <button class="filter-btn" onclick="filterShop('bitmain', this)">Bitmain</button>
+              <button class="filter-btn" onclick="filterShop('microbt', this)">MicroBT</button>
+              <button class="filter-btn" onclick="filterShop('other', this)">Other</button>
             </div>
-            <div class="product-name">Antminer S21 Pro (335TH)</div>
-            <div class="product-price">$3,299</div>
-            <div class="product-meta"><span>335 TH/s</span><span>5340W</span></div>
-            <div class="product-retailer">Bitmain</div>
-            <button class="btn-primary" onclick="shopAffiliate('bitmain')">Shop Bitmain</button>
           </div>
-          <div class="card shop-card">
-            <div class="product-image">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+          <div class="products-grid" id="productsGrid">
+            <div class="product-card" data-brand="bitmain">
+              <div class="product-badge">Best Seller</div>
+              <div class="product-image-container">
+                <div class="product-image">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/></svg>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-brand">Bitmain</div>
+                <div class="product-name">Antminer S21 Pro</div>
+                <div class="product-specs">
+                  <span class="spec">335 TH/s</span>
+                  <span class="spec">5340W</span>
+                </div>
+                <div class="product-price">$3,299<span class="price-unit">/unit</span></div>
+                <div class="product-stock in-stock">In Stock</div>
+                <button class="btn-shop" onclick="shopProduct('Antminer S21 Pro', 3299, 'bitmain')">Shop Now</button>
+              </div>
             </div>
-            <div class="product-name">Whatsminer M63S (386T)</div>
-            <div class="product-price">$2,850</div>
-            <div class="product-meta"><span>386 TH/s</span><span>7155W</span></div>
-            <div class="product-retailer">MicroBT</div>
-            <button class="btn-primary" onclick="shopAffiliate('microbt')">Shop MicroBT</button>
-          </div>
-          <div class="card shop-card">
-            <div class="product-image">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+            <div class="product-card" data-brand="microbt">
+              <div class="product-badge">Popular</div>
+              <div class="product-image-container">
+                <div class="product-image">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-brand">MicroBT</div>
+                <div class="product-name">Whatsminer M63S</div>
+                <div class="product-specs">
+                  <span class="spec">386 TH/s</span>
+                  <span class="spec">7155W</span>
+                </div>
+                <div class="product-price">$2,850<span class="price-unit">/unit</span></div>
+                <div class="product-stock in-stock">In Stock</div>
+                <button class="btn-shop" onclick="shopProduct('Whatsminer M63S', 2850, 'microbt')">Shop Now</button>
+              </div>
             </div>
-            <div class="product-name">AvalonMiner A1466</div>
-            <div class="product-price">$2,099</div>
-            <div class="product-meta"><span>170 TH/s</span><span>3300W</span></div>
-            <div class="product-retailer">Canaan</div>
-            <button class="btn-primary" onclick="shopAffiliate('canaan')">Shop Canaan</button>
-          </div>
-          <div class="card shop-card">
-            <div class="product-image">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zM18 19H4V5h14v14zM6 13h5v5H6v-5z"/></svg>
+            <div class="product-card" data-brand="bitmain">
+              <div class="product-image-container">
+                <div class="product-image">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-brand">Bitmain</div>
+                <div class="product-name">Antminer S23 Hydro</div>
+                <div class="product-specs">
+                  <span class="spec">1160 TH/s</span>
+                  <span class="spec">17600W</span>
+                </div>
+                <div class="product-price">$8,999<span class="price-unit">/unit</span></div>
+                <div class="product-stock low-stock">Low Stock</div>
+                <button class="btn-shop" onclick="shopProduct('Antminer S23 Hydro', 8999, 'bitmain')">Shop Now</button>
+              </div>
             </div>
-            <div class="product-name">Goldshell KD6</div>
-            <div class="product-price">$1,250</div>
-            <div class="product-meta"><span>26.3 TH/s</span><span>2630W</span></div>
-            <div class="product-retailer">Goldshell</div>
-            <button class="btn-primary" onclick="shopAffiliate('goldshell')">Shop Goldshell</button>
-          </div>
-          <div class="card shop-card">
-            <div class="product-image">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.56 7.45-6 8.44-3.44-.99-6-4.44-6-8.44V6.31l6-2.12v5.09c0 1.19.55 2.26 1.42 3H13v2h2.58c-.25.74-.08 1.54.42 2.12v-.23l1 1.74c-.74.5-1.68.62-2.54.31L11 15.2c.67-.15 1.31-.58 1.71-1.22h2.71c1.1 0 2-.9 2-2.02V9.09l-.42-.12z"/></svg>
+            <div class="product-card" data-brand="canaan">
+              <div class="product-image-container">
+                <div class="product-image">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/></svg>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-brand">Canaan</div>
+                <div class="product-name">AvalonMiner A1466</div>
+                <div class="product-specs">
+                  <span class="spec">170 TH/s</span>
+                  <span class="spec">3300W</span>
+                </div>
+                <div class="product-price">$2,099<span class="price-unit">/unit</span></div>
+                <div class="product-stock in-stock">In Stock</div>
+                <button class="btn-shop" onclick="shopProduct('AvalonMiner A1466', 2099, 'canaan')">Shop Now</button>
+              </div>
             </div>
-            <div class="product-name">iBeLink BM-K3</div>
-            <div class="product-price">$3,499</div>
-            <div class="product-meta"><span>9.4 TH/s</span><span>3400W</span></div>
-            <div class="product-retailer">iBeLink</div>
-            <button class="btn-primary" onclick="shopAffiliate('ibelink')">Shop iBeLink</button>
-          </div>
-          <div class="products-title" style="margin-top:24px">Power & Accessories</div>
-          <div class="card shop-card">
-            <div class="product-image">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+            <div class="product-card" data-brand="other">
+              <div class="product-image-container">
+                <div class="product-image">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 9V7h-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2v-2h-2V9h2zM18 19H4V5h14v14zM6 13h5v5H6v-5z"/></svg>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-brand">Goldshell</div>
+                <div class="product-name">KD6 Miner</div>
+                <div class="product-specs">
+                  <span class="spec">26.3 TH/s</span>
+                  <span class="spec">2630W</span>
+                </div>
+                <div class="product-price">$1,250<span class="price-unit">/unit</span></div>
+                <div class="product-stock in-stock">In Stock</div>
+                <button class="btn-shop" onclick="shopProduct('KD6', 1250, 'goldshell')">Shop Now</button>
+              </div>
             </div>
-            <div class="product-name">APW7 Power Supply</div>
-            <div class="product-price">$289</div>
-            <div class="product-meta"><span>1800W</span><span>110V/220V</span></div>
-            <div class="product-retailer">Bitmain</div>
-            <button class="btn-primary" onclick="shopAffiliate('bitmain_psu')">Shop Bitmain</button>
-          </div>
-          <div class="card shop-card">
-            <div class="product-image">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21z"/></svg>
+            <div class="product-card" data-brand="microbt">
+              <div class="product-image-container">
+                <div class="product-image">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-brand">MicroBT</div>
+                <div class="product-name">Whatsminer M66S</div>
+                <div class="product-specs">
+                  <span class="spec">456 TH/s</span>
+                  <span class="spec">8520W</span>
+                </div>
+                <div class="product-price">$3,200<span class="price-unit">/unit</span></div>
+                <div class="product-stock in-stock">In Stock</div>
+                <button class="btn-shop" onclick="shopProduct('Whatsminer M66S', 3200, 'microbt')">Shop Now</button>
+              </div>
             </div>
-            <div class="product-name">PDU Controller</div>
-            <div class="product-price">$149</div>
-            <div class="product-meta"><span>8-Port</span><span>LCD Display</span></div>
-            <div class="product-retailer">Generic</div>
-            <button class="btn-primary" onclick="shopAffiliate('pdu')">Shop Now</button>
+            <div class="product-card" data-brand="bitmain">
+              <div class="product-image-container">
+                <div class="product-image">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm6 9.09c0 4-2.56 7.45-6 8.44-3.44-.99-6-4.44-6-8.44V6.31l6-2.12v5.09c0 1.19.55 2.26 1.42 3H13v2h2.58c-.25.74-.08 1.54.42 2.12v-.23l1 1.74c-.74.5-1.68.62-2.54.31L11 15.2c.67-.15 1.31-.58 1.71-1.22h2.71c1.1 0 2-.9 2-2.02V9.09l-.42-.12z"/></svg>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-brand">Bitmain</div>
+                <div class="product-name">Antminer T21</div>
+                <div class="product-specs">
+                  <span class="spec">360 TH/s</span>
+                  <span class="spec">7180W</span>
+                </div>
+                <div class="product-price">$2,499<span class="price-unit">/unit</span></div>
+                <div class="product-stock in-stock">In Stock</div>
+                <button class="btn-shop" onclick="shopProduct('Antminer T21', 2499, 'bitmain')">Shop Now</button>
+              </div>
+            </div>
+            <div class="product-card" data-brand="other">
+              <div class="product-image-container">
+                <div class="product-image">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21z"/></svg>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-brand">iBeLink</div>
+                <div class="product-name">BM-K3</div>
+                <div class="product-specs">
+                  <span class="spec">9.4 TH/s</span>
+                  <span class="spec">3400W</span>
+                </div>
+                <div class="product-price">$3,499<span class="price-unit">/unit</span></div>
+                <div class="product-stock out-stock">Pre-order</div>
+                <button class="btn-shop" onclick="shopProduct('BM-K3', 3499, 'ibelink')">Pre-order</button>
+              </div>
+            </div>
           </div>
-          <div class="card disclaimer">
-            <p>⚠️ Affiliate links. We may earn a commission on purchases. Set your affiliate ID in Settings.</p>
+          <div class="products-title" style="margin-top:32px">Power Supplies</div>
+          <div class="products-grid">
+            <div class="product-card" data-brand="bitmain">
+              <div class="product-image-container">
+                <div class="product-image">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-brand">Bitmain</div>
+                <div class="product-name">APW7 PSU</div>
+                <div class="product-specs">
+                  <span class="spec">1800W</span>
+                  <span class="spec">110V/220V</span>
+                </div>
+                <div class="product-price">$289<span class="price-unit">/unit</span></div>
+                <div class="product-stock in-stock">In Stock</div>
+                <button class="btn-shop" onclick="shopProduct('APW7 PSU', 289, 'bitmain')">Shop Now</button>
+              </div>
+            </div>
+            <div class="product-card" data-brand="bitmain">
+              <div class="product-image-container">
+                <div class="product-image">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+                </div>
+              </div>
+              <div class="product-info">
+                <div class="product-brand">Bitmain</div>
+                <div class="product-name">APW12 PSU</div>
+                <div class="product-specs">
+                  <span class="spec">3600W</span>
+                  <span class="spec">220V</span>
+                </div>
+                <div class="product-price">$489<span class="price-unit">/unit</span></div>
+                <div class="product-stock in-stock">In Stock</div>
+                <button class="btn-shop" onclick="shopProduct('APW12 PSU', 489, 'bitmain')">Shop Now</button>
+              </div>
+            </div>
+          </div>
+          <div class="shop-disclaimer">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span>Affiliate links. We earn commissions on purchases. Set your Affiliate ID in Settings to earn.</span>
           </div>
         </div>
         <div class="tab" id="tab-settings">
@@ -1117,6 +1269,38 @@
         document.getElementById('affiliateValue').style.color = '#00FF88';
       }
     });
+
+    // Shop filter function
+    function filterShop(brand, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      document.querySelectorAll('.product-card').forEach(card => {
+        if (brand === 'all') {
+          card.classList.remove('hidden');
+        } else {
+          if (card.dataset.brand === brand) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        }
+      });
+    }
+
+    // Shop product function
+    function shopProduct(name, price, brand) {
+      const affiliateId = localStorage.getItem('affiliate_id') || '';
+      const urls = {
+        bitmain: 'https://shop.bitmain.com/collections/asics?ref=' + affiliateId,
+        microbt: 'https://www.whatsminer.com/?ref=' + affiliateId,
+        canaan: 'https://canaan.io/shop?ref=' + affiliateId,
+        goldshell: 'https://goldshell.com/product?ref=' + affiliateId,
+        ibelink: 'https://ibelink.io/shop?ref=' + affiliateId
+      };
+      const url = urls[brand] || urls.bitmain;
+      window.open(url, '_blank');
+    }
 
     // Shop with affiliate link
     function shopAffiliate(retailer) {
