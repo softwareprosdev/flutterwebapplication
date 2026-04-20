@@ -3,18 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Crypto Mecca Wallet - Enterprise Crypto Wallet">
   <title>Crypto Mecca Wallet</title>
   <style>
-    body { margin: 0; background: #05070D; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; background: #05070D; }
+    body { display: flex; align-items: center; justify-content: center; font-family: system-ui, sans-serif; }
+    .loading { color: #00E5FF; text-align: center; }
+    .loading h1 { color: #00E5FF; margin-bottom: 10px; }
+    .loading p { color: #94A3B8; }
   </style>
 </head>
 <body>
+  <div class="loading">
+    <h1>CRYPTO MECCA</h1>
+    <p>Loading...</p>
+  </div>
   <script src="flutter.js"></script>
-  <script>
-    window.addEventListener('flutter-initialized', function() {
-      console.log('Flutter initialized');
-    });
-  </script>
 </body>
 </html>
