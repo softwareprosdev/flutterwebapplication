@@ -18,9 +18,10 @@ RUN flutter create . --platforms web
 # Copy full project
 COPY . .
 
-# Production web build
+# Production web build - use html renderer for compatibility
 RUN flutter build web --release \
     --dart-define=FLUTTER_WEB_USE_SKIA=false \
+    --dart-define=FLUTTER_WEB_USE_SKWASM=false \
     --no-source-maps
 
 # Runtime stage - minimal Nginx only

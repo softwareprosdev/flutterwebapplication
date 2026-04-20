@@ -3,21 +3,206 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Crypto Mecca Wallet</title>
   <style>
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; height: 100%; background: #05070D; }
-    body { display: flex; align-items: center; justify-content: center; font-family: system-ui, sans-serif; }
-    .loading { color: #00E5FF; text-align: center; }
-    .loading h1 { color: #00E5FF; margin-bottom: 10px; }
-    .loading p { color: #94A3B8; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #05070D; overflow: hidden; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .app-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .loading {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .loading h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: #00E5FF;
+      text-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+      margin-bottom: 12px;
+    }
+    .loading p {
+      font-size: 1rem;
+      color: #94A3B8;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    /* Hide loading when Flutter loads */
+    body.flutter-loaded .loading { display: none; }
+    body.flutter-loaded .app { display: flex; }
+    .app { display: none; flex: 1; flex-direction: column; }
+    nav {
+      display: flex;
+      justify-content: space-around;
+      padding: 12px;
+      background: #0B1020;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    nav button {
+      background: none;
+      border: none;
+      color: #94A3B8;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    nav button.active { color: #00E5FF; }
+    nav button svg { width: 24px; height: 24px; }
+    .tab-content { flex: 1; overflow: auto; padding: 16px; }
+    .tab { display: none; }
+    .tab.active { display: block; }
+    .card {
+      background: #0B1020;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .card h3 { color: #00E5FF; font-size: 18px; margin-bottom: 8px; }
+    .card p { color: #94A3B8; font-size: 14px; }
+    .btn-primary {
+      background: linear-gradient(135deg, #00E5FF, #00B8D4);
+      color: #05070D;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+    }
   </style>
 </head>
 <body>
-  <div class="loading">
-    <h1>CRYPTO MECCA</h1>
-    <p>Loading...</p>
+  <div class="app-container">
+    <div class="loading">
+      <h1>CRYPTO MECCA</h1>
+      <p>Enterprise Wallet</p>
+    </div>
+    <div class="app">
+      <div class="tab-content" id="tab-content">
+        <div class="tab active" id="tab-dashboard">
+          <div class="card">
+            <h3>Dashboard</h3>
+            <p>Welcome to Crypto Mecca Wallet</p>
+          </div>
+          <div class="card">
+            <h3>Portfolio</h3>
+            <p>Track your crypto holdings</p>
+          </div>
+        </div>
+        <div class="tab" id="tab-wallet">
+          <div class="card">
+            <h3>Wallet</h3>
+            <p>Manage your wallets</p>
+          </div>
+        </div>
+        <div class="tab" id="tab-mining">
+          <div class="card">
+            <h3>Mining ROI</h3>
+            <p>Calculate mining profits</p>
+          </div>
+        </div>
+        <div class="tab" id="tab-news">
+          <div class="card">
+            <h3>Crypto News</h3>
+            <p>Latest market updates</p>
+          </div>
+        </div>
+        <div class="tab" id="tab-shop">
+          <div class="card">
+            <h3>Affiliate Shop</h3>
+            <p>Hardware & accessories</p>
+          </div>
+          <button class="btn-primary">Browse Products</button>
+        </div>
+        <div class="tab" id="tab-settings">
+          <div class="card">
+            <h3>Settings</h3>
+            <p>App configuration</p>
+          </div>
+        </div>
+      </div>
+      <nav>
+        <button class="active" data-tab="dashboard">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+          Dashboard
+        </button>
+        <button data-tab="wallet">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm10-1c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v2h2v2h2v-2h2v-2h-2c-1.1 0-2-.9-2-2V8z"/></svg>
+          Wallet
+        </button>
+        <button data-tab="mining">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          Mining
+        </button>
+        <button data-tab="news">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 3H2c-.55 0-1 .45-1 1v14c0 .55.45 1 1 1h20c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zM4 18h16V6H4v12z"/></svg>
+          News
+        </button>
+        <button data-tab="shop">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z"/></svg>
+          Shop
+        </button>
+        <button data-tab="settings">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.17l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.17L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.17l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.17l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          Settings
+        </button>
+      </nav>
+    </div>
   </div>
+
   <script src="flutter.js"></script>
+  <script>
+    // Simple tab navigation
+    document.querySelectorAll('nav button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        
+        // Update buttons
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Update tabs
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+      });
+    });
+
+    // Mark as loaded when Flutter ready
+    window.addEventListener('flutter-initialized', function() {
+      document.body.classList.add('flutter-loaded');
+    });
+
+    // Fallback: show app after timeout
+    setTimeout(() => {
+      document.body.classList.add('flutter-loaded');
+    }, 3000);
+  </script>
 </body>
 </html>
