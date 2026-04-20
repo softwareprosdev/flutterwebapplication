@@ -282,6 +282,15 @@
     .wallet-row { display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; }
     .wallet-row:hover { border-color: rgba(0,229,255,0.5); }
     .wallet-row.active { border-color: #00E5FF; background: rgba(0,229,255,0.1); }
+    .quick-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+    .quick-actions .action-btn { flex: 1 1 calc(33% - 10px); min-width: 80px; padding: 12px 8px; font-size: 12px; }
+    .quick-actions .action-btn svg { width: 20px; height: 20px; margin-bottom: 4px; }
+    .deposit-networks { margin-bottom: 16px; }
+    .network-badge { display: inline-block; padding: 8px 16px; background: rgba(0,229,255,0.1); border: 1px solid #00E5FF; border-radius: 8px; color: #00E5FF; }
+    .swap-container { position: relative; margin-bottom: 16px; }
+    .swap-arrow { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: #0B1020; border: 2px solid #00E5FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-size: 20px; }
+    .swap-rate { text-align: center; color: #94A3B8; font-size: 14px; margin-bottom: 12px; }
+    .swap-slippage { display: flex; justify-content: space-between; font-size: 12px; color: #64748B; margin-bottom: 16px; }
     .wallet-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; }
     .wallet-icon.btc { background: linear-gradient(135deg, #F7931A, #FFB84D); color: #05070D; }
     .wallet-icon.eth { background: linear-gradient(135deg, #627EEA, #8B9FFF); color: #FFFFFF; }
@@ -469,9 +478,11 @@
           <div class="card">
             <h3>Quick Actions</h3>
             <div class="quick-actions">
-              <button class="action-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>Send</button>
+              <button class="action-btn" onclick="openDepositModal()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Deposit</button>
+              <button class="action-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>Send</button>
               <button class="action-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>Receive</button>
-              <button class="action-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Swap</button>
+              <button class="action-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>Buy</button>
+              <button class="action-btn" onclick="openSwapModal()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/></svg>Swap</button>
             </div>
           </div>
           <div class="holdings-title">Holdings</div>
@@ -711,6 +722,85 @@
                 <div class="tx-spinner"></div>
                 <p>Processing Transaction...</p>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deposit Modal -->
+        <div id="depositModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>Deposit Crypto</h3>
+              <span class="modal-close" onclick="closeModal('depositModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+              <div class="input-group">
+                <label>Select Asset</label>
+                <select id="depositAsset" class="modal-select" onchange="updateDepositQR()">
+                  <option value="BTC">Bitcoin (BTC)</option>
+                  <option value="ETH">Ethereum (ETH)</option>
+                  <option value="SOL">Solana (SOL)</option>
+                  <option value="DOT">Polkadot (DOT)</option>
+                </select>
+              </div>
+              <div class="qr-container">
+                <div class="qr-placeholder">
+                  <div class="qr-icon">📱</div>
+                  <p>QR Code</p>
+                </div>
+              </div>
+              <div class="input-group">
+                <label>Your Deposit Address</label>
+                <div class="address-display">
+                  <input type="text" id="depositAddress" readonly class="modal-input">
+                  <button class="btn-copy" onclick="copyDepositAddress()">Copy</button>
+                </div>
+              </div>
+              <div class="deposit-networks">
+                <p style="color:#94A3B8;font-size:12px;margin-bottom:8px">Network:</p>
+                <div class="network-badge" id="depositNetwork">Bitcoin (BTC)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Swap Modal -->
+        <div id="swapModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>Swap Crypto</h3>
+              <span class="modal-close" onclick="closeModal('swapModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+              <div class="swap-container">
+                <div class="input-group">
+                  <label>You Pay</label>
+                  <select id="swapFrom" class="modal-select" onchange="updateSwapRate()">
+                    <option value="BTC">Bitcoin (BTC)</option>
+                    <option value="ETH">Ethereum (ETH)</option>
+                    <option value="SOL">Solana (SOL)</option>
+                    <option value="DOT">Polkadot (DOT)</option>
+                  </select>
+                  <input type="number" id="swapFromAmount" placeholder="0.00" class="modal-input" oninput="updateSwapRate()">
+                </div>
+                <div class="swap-arrow" onclick="swapAssets()">⇅</div>
+                <div class="input-group">
+                  <label>You Receive</label>
+                  <select id="swapTo" class="modal-select" onchange="updateSwapRate()">
+                    <option value="ETH">Ethereum (ETH)</option>
+                    <option value="BTC">Bitcoin (BTC)</option>
+                    <option value="SOL">Solana (SOL)</option>
+                    <option value="DOT">Polkadot (DOT)</option>
+                  </select>
+                  <input type="number" id="swapToAmount" readonly class="modal-input" placeholder="0.00">
+                </div>
+              </div>
+              <div class="swap-rate" id="swapRate">1 BTC ≈ 15.42 ETH</div>
+              <div class="swap-slippage">
+                <span>Slippage: 0.5%</span>
+                <span id="swapExpiry">Expires in 10:00</span>
+              </div>
+              <button class="btn-primary" onclick="processSwap()">Swap Now</button>
             </div>
           </div>
         </div>
@@ -1241,6 +1331,91 @@
         }
       });
     });
+
+    // Deposit modal
+    function openDepositModal() {
+      updateDepositQR();
+      openModal('depositModal');
+    }
+
+    function updateDepositQR() {
+      const asset = document.getElementById('depositAsset').value;
+      const networks = { BTC: 'Bitcoin (BTC)', ETH: 'Ethereum (ERC-20)', SOL: 'Solana (SOL)', DOT: 'Polkadot (DOT)' };
+      document.getElementById('depositAddress').value = walletAddresses[asset];
+      document.getElementById('depositNetwork').textContent = networks[asset];
+    }
+
+    function copyDepositAddress() {
+      navigator.clipboard.writeText(document.getElementById('depositAddress').value).then(() => {
+        alert('Address copied!');
+      });
+    }
+
+    // Swap modal
+    const rates = { BTC: 15.42, ETH: 1, SOL: 0.0025, DOT: 0.008 };
+    const ratesReverse = { BTC: 0.065, ETH: 1, SOL: 400, DOT: 125 };
+
+    function openSwapModal() {
+      updateSwapRate();
+      openModal('swapModal');
+    }
+
+    function updateSwapRate() {
+      const from = document.getElementById('swapFrom').value;
+      const to = document.getElementById('swapTo').value;
+      const fromAmount = parseFloat(document.getElementById('swapFromAmount').value) || 0;
+      
+      if (from === to) {
+        document.getElementById('swapToAmount').value = fromAmount;
+        return;
+      }
+      
+      const rate = from === 'BTC' ? rates[to] : (to === 'BTC' ? ratesReverse[from] : (rates[to] / rates[from]));
+      document.getElementById('swapRate').textContent = `1 ${from} ≈ ${rate.toFixed(4)} ${to}`;
+      document.getElementById('swapToAmount').value = (fromAmount * rate).toFixed(6);
+    }
+
+    function swapAssets() {
+      const from = document.getElementById('swapFrom');
+      const to = document.getElementById('swapTo');
+      const temp = from.value;
+      from.value = to.value;
+      to.value = temp;
+      updateSwapRate();
+    }
+
+    let swapTimeRemaining = 600;
+    setInterval(() => {
+      if (swapTimeRemaining > 0 && document.getElementById('swapExpiry')) {
+        swapTimeRemaining--;
+        const mins = Math.floor(swapTimeRemaining / 60);
+        const secs = swapTimeRemaining % 60;
+        document.getElementById('swapExpiry').textContent = `Expires in ${mins}:${secs.toString().padStart(2, '0')}`;
+      }
+    }, 1000);
+
+    function processSwap() {
+      const from = document.getElementById('swapFrom').value;
+      const to = document.getElementById('swapTo').value;
+      const amount = document.getElementById('swapToAmount').value;
+      
+      if (!amount || parseFloat(amount) <= 0) {
+        alert('Please enter an amount');
+        return;
+      }
+      
+      closeModal('swapModal');
+      openModal('txStatusModal');
+      
+      setTimeout(() => {
+        const statusEl = document.getElementById('txStatus');
+        statusEl.innerHTML = '<div class="success-icon">✓</div><p style="color:#00FF88">Swap Complete!</p><p style="color:#94A3B8;font-size:14px">Received ' + amount + ' ' + to + '</p>';
+        
+        setTimeout(() => {
+          closeModal('txStatusModal');
+        }, 2000);
+      }, 3000);
+    }
   </script>
 </body>
 </html>
