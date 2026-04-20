@@ -1,0 +1,22 @@
+# .dockerignore
+# Ignore empty directories but keep structure
+assets/fonts/
+assets/images/
+
+# Ignore build artifacts from previous builds
+build/
+.dart_tool/
+.packages
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,9 +1,8 @@
 # =============================================================================
-# Crypto Mecca Wallet - Production Dockerfile
-# Optimized for Coolify VPS deployment
+# Crypto Mecca Wallet - Production Dockerfile (Fixed)
 # =============================================================================
 
-# Build stage
+# Build stage - use Flutter base image
 FROM dart:3.7.0 AS builder
 
 # Install Flutter
@@ -19,6 +18,11 @@ COPY pubspec.yaml ./
 RUN flutter pub get
 
 COPY lib/ ./lib/
+
+# Create assets directory if it doesn't exist (even if empty)
+RUN mkdir -p assets/fonts assets/images && \
+    touch assets/fonts/.gitkeep assets/images/.gitkeep
+
 COPY assets/ ./assets/
 
 RUN flutter build web \
@@ -40,9 +44,7 @@ COPY default.conf /etc/nginx/conf.d/default.conf
 RUN chmod -R 755 /usr/share/nginx/html && \
     chmod +x /usr/local/bin/*
 
-# Support both ports (Coolify compatibility)
-EXPOSE 8080
-EXPOSE 3000
+# Support both Coolify ports
+EXPOSE 3000 8080
 
-# Coolify detects CMD - use port 8080
 CMD ["nginx", "-g", "daemon off;"]
