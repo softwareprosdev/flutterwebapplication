@@ -1,5 +1,6 @@
 # =============================================================================
-# Crypto Mecca Wallet - GitHub Actions Multi-platform Dockerfile
+# Crypto Mecca Wallet - Production Dockerfile
+# Optimized for Coolify VPS deployment
 # =============================================================================
 
 # Build stage
@@ -39,6 +40,9 @@ COPY default.conf /etc/nginx/conf.d/default.conf
 RUN chmod -R 755 /usr/share/nginx/html && \
     chmod +x /usr/local/bin/*
 
+# Support both ports (Coolify compatibility)
 EXPOSE 8080
+EXPOSE 3000
 
+# Coolify detects CMD - use port 8080
 CMD ["nginx", "-g", "daemon off;"]
