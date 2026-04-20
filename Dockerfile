@@ -20,7 +20,8 @@ COPY . .
 
 # Production web build
 RUN flutter build web --release \
-    --dart-define=FLUTTER_WEB_USE_SKIA=false
+    --dart-define=FLUTTER_WEB_USE_SKIA=false \
+    --no-source-maps
 
 # Runtime stage - minimal Nginx only
 FROM nginx:1.27-alpine
