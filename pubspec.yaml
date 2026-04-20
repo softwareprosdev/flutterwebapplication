@@ -9,72 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  # UI & Design
   cupertino_icons: any
-  google_fonts: any
-  flutter_svg: any
-  shimmer: any
-  fl_chart: any
-  cached_network_image: any
-  flutter_animate: any
-  glassmorphism_ui: any
-  gradient_borders: any
-
-  # State Management
-  flutter_bloc: any
-  equatable: any
-  get_it: any
-  riverpod: any
-
-  # Security & Encryption
-  flutter_secure_storage: any
-  flutter_dotenv: any
-  encrypt: any
-  cryptography: any
-  pointycastle: any
-  crypto: any
-  bip39: any
-  bip32: any
-  intl: any
-
-  # Network & API
-  dio: any
-  http: any
-  connectivity_plus: any
-
-  # Local Storage
-  shared_preferences: any
-  hive: any
-  hive_flutter: any
-  path_provider: any
-
-  # 2FA & Auth
-  otp: any
-  qr_flutter: any
-  mobile_scanner: any
-  local_auth: any
-
-  # Utilities
-  url_launcher: any
-  uuid: any
-  version: any
-  permission_handler: any
-
-  # Firebase
-  firebase_core: any
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: any
-  build_runner: any
-  hive_generator: any
-  json_serializable: any
-  freezed: any
-  freezed_annotation: any
-  json_annotation: any
-  flutter_native_splash: any
 
 flutter:
   uses-material-design: true
