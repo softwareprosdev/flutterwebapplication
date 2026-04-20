@@ -232,8 +232,65 @@
       margin-bottom: 12px;
       border: 1px solid rgba(255,255,255,0.1);
     }
-    .card h3 { color: #00E5FF; font-size: 18px; margin-bottom: 8px; }
+    .card h3 { color: #00E5FF; font-size: 14px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
     .card p { color: #94A3B8; font-size: 14px; }
+    .portfolio-card { padding: 20px; text-align: center; position: relative; overflow: hidden; }
+    .portfolio-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,229,255,0.1), transparent); }
+    .portfolio-card .card-label { font-size: 12px; color: #94A3B8; margin-bottom: 4px; }
+    .portfolio-card .card-value { font-size: 32px; font-weight: 700; color: #FFFFFF; margin-bottom: 4px; }
+    .portfolio-card .card-change { font-size: 14px; font-weight: 600; }
+    .portfolio-card .card-change.positive { color: #00FF88; }
+    .portfolio-card .card-change.negative { color: #FF4757; }
+    .quick-actions { display: flex; gap: 12px; margin-top: 8px; }
+    .action-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 16px;
+      background: rgba(0,229,255,0.1);
+      border: 1px solid rgba(0,229,255,0.3);
+      border-radius: 12px;
+      color: #00E5FF;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .action-btn svg { width: 24px; height: 24px; }
+    .action-btn:hover { background: rgba(0,229,255,0.2); transform: translateY(-2px); }
+    .holdings-title { font-size: 14px; font-weight: 600; color: #94A3B8; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .coin-row { display: flex; align-items: center; gap: 12px; }
+    .coin-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; }
+    .coin-icon.btc { background: linear-gradient(135deg, #F7931A, #FFB84D); color: #05070D; }
+    .coin-icon.eth { background: linear-gradient(135deg, #627EEA, #8B9FFF); color: #FFFFFF; }
+    .coin-icon.sol { background: linear-gradient(135deg, #00FF88, #00CC6A); color: #05070D; }
+    .coin-icon.dots { background: linear-gradient(135deg, #E6007A, #FF4D9A); color: #FFFFFF; }
+    .coin-info { flex: 1; }
+    .coin-name { font-weight: 600; color: #FFFFFF; }
+    .coin-amount { font-size: 12px; color: #94A3B8; }
+    .coin-value { text-align: right; }
+    .coin-usd { font-weight: 600; color: #FFFFFF; }
+    .coin-change { font-size: 12px; }
+    .coin-change.positive { color: #00FF88; }
+    .coin-change.negative { color: #FF4757; }
+    .wallet-balance { text-align: center; padding: 20px; }
+    .balance-label { font-size: 14px; color: #94A3B8; }
+    .balance-value { font-size: 36px; font-weight: 700; color: #FFFFFF; margin: 8px 0; }
+    .balance-locked { font-size: 12px; color: #FFB020; }
+    .wallets-title, .mining-title, .news-title, .products-title { font-size: 14px; font-weight: 600; color: #94A3B8; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .wallet-row { display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s; }
+    .wallet-row:hover { border-color: rgba(0,229,255,0.5); }
+    .wallet-row.active { border-color: #00E5FF; background: rgba(0,229,255,0.1); }
+    .wallet-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; }
+    .wallet-icon.btc { background: linear-gradient(135deg, #F7931A, #FFB84D); color: #05070D; }
+    .wallet-icon.eth { background: linear-gradient(135deg, #627EEA, #8B9FFF); color: #FFFFFF; }
+    .wallet-icon.sol { background: linear-gradient(135deg, #00FF88, #00CC6A); color: #05070D; }
+    .wallet-icon.dots { background: linear-gradient(135deg, #E6007A, #FF4D9A); color: #FFFFFF; }
+    .wallet-info { flex: 1; }
+    .wallet-name { font-weight: 600; color: #FFFFFF; }
+    .wallet-address { font-size: 12px; color: #64748B; font-family: monospace; }
+    .wallet-balance-sm { font-weight: 600; color: #FFFFFF; text-align: right; }
     .btn-primary {
       background: linear-gradient(135deg, #00E5FF, #00B8D4);
       color: #05070D;
@@ -262,25 +319,112 @@
     </div>
     <div class="app">
       <header>
-        <h2>Crypto Mecca</h2>
+        <h2>Crypto Mecca <span style="font-size:10px;color:#64748B;font-weight:400;">v4.0.0</span></h2>
         <div class="status">Connected</div>
       </header>
       <div class="tab-content" id="tab-content">
         <div class="tab active" id="tab-dashboard">
-          <div class="card">
-            <h3>Dashboard</h3>
-            <p>Welcome to Crypto Mecca Wallet</p>
+          <div class="card portfolio-card">
+            <div class="card-label">Total Portfolio Value</div>
+            <div class="card-value">$47,832.50</div>
+            <div class="card-change positive">+$2,341.20 (+5.15%)</div>
           </div>
           <div class="card">
-            <h3>Portfolio</h3>
-            <p>Track your crypto holdings</p>
+            <h3>Quick Actions</h3>
+            <div class="quick-actions">
+              <button class="action-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>Send</button>
+              <button class="action-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>Receive</button>
+              <button class="action-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Swap</button>
+            </div>
+          </div>
+          <div class="holdings-title">Holdings</div>
+          <div class="card coin-row">
+            <div class="coin-icon btc">₿</div>
+            <div class="coin-info">
+              <div class="coin-name">Bitcoin</div>
+              <div class="coin-amount">0.75 BTC</div>
+            </div>
+            <div class="coin-value">
+              <div class="coin-usd">$33,562.50</div>
+              <div class="coin-change positive">+4.2%</div>
+            </div>
+          </div>
+          <div class="card coin-row">
+            <div class="coin-icon eth">Ξ</div>
+            <div class="coin-info">
+              <div class="coin-name">Ethereum</div>
+              <div class="coin-amount">3.2 ETH</div>
+            </div>
+            <div class="coin-value">
+              <div class="coin-usd">$6,140.00</div>
+              <div class="coin-change positive">+6.8%</div>
+            </div>
+          </div>
+          <div class="card coin-row">
+            <div class="coin-icon sol">◎</div>
+            <div class="coin-info">
+              <div class="coin-name">Solana</div>
+              <div class="coin-amount">28 SOL</div>
+            </div>
+            <div class="coin-value">
+              <div class="coin-usd">$4,830.00</div>
+              <div class="coin-change positive">+12.4%</div>
+            </div>
+          </div>
+          <div class="card coin-row">
+            <div class="coin-icon dots">●</div>
+            <div class="coin-info">
+              <div class="coin-name">Polkadot</div>
+              <div class="coin-amount">150 DOT</div>
+            </div>
+            <div class="coin-value">
+              <div class="coin-usd">$1,050.00</div>
+              <div class="coin-change negative">-2.1%</div>
+            </div>
           </div>
         </div>
         <div class="tab" id="tab-wallet">
           <div class="card">
-            <h3>Wallet</h3>
-            <p>Manage your wallets</p>
+            <div class="wallet-balance">
+              <div class="balance-label">Available Balance</div>
+              <div class="balance-value">$47,832.50</div>
+              <div class="balance-locked">$1,250.00 locked in orders</div>
+            </div>
           </div>
+          <div class="wallets-title">My Wallets</div>
+          <div class="card wallet-row active">
+            <div class="wallet-icon btc">₿</div>
+            <div class="wallet-info">
+              <div class="wallet-name">Bitcoin Wallet</div>
+              <div class="wallet-address">bc1qxy...8jpm</div>
+            </div>
+            <div class="wallet-balance-sm">$33,562.50</div>
+          </div>
+          <div class="card wallet-row">
+            <div class="wallet-icon eth">Ξ</div>
+            <div class="wallet-info">
+              <div class="wallet-name">Ethereum Wallet</div>
+              <div class="wallet-address">0x3f...9a2c</div>
+            </div>
+            <div class="wallet-balance-sm">$6,140.00</div>
+          </div>
+          <div class="card wallet-row">
+            <div class="wallet-icon sol">◎</div>
+            <div class="wallet-info">
+              <div class="wallet-name">Solana Wallet</div>
+              <div class="wallet-address">7x8k...3p9m</div>
+            </div>
+            <div class="wallet-balance-sm">$4,830.00</div>
+          </div>
+          <div class="card wallet-row">
+            <div class="wallet-icon dots">●</div>
+            <div class="wallet-info">
+              <div class="wallet-name">Polkadot Wallet</div>
+              <div class="wallet-address">1x7c...2n8k</div>
+            </div>
+            <div class="wallet-balance-sm">$1,050.00</div>
+          </div>
+          <button class="btn-primary">+ Create New Wallet</button>
         </div>
         <div class="tab" id="tab-mining">
           <div class="card">
