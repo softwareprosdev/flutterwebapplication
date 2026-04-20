@@ -1,0 +1,23 @@
+{
+  "target": {
+    "production": {
+      "context": ".",
+      "tags": [
+        "zerodayinst/crypto-mecca:latest"
+      ],
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "cache-from": [
+        "type=gha"
+      ],
+      "cache-to": [
+        "type=gha,mode=max"
+      ],
+      "args": {
+        "FLUTTER_VERSION": "3.24.0"
+      }
+    }
+  }
+}

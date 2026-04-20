@@ -1,0 +1,28 @@
+{
+  "name": "crypto-mecca-wallet",
+  "description": "Crypto Mecca - Enterprise Crypto Wallet Web App",
+  "version": "1.0.0",
+  "build": {
+    "builder": "heroku/builder:classic",
+    "settings": {
+      "flutter": {
+        "channel": "stable",
+        "version": "3.24.0"
+      }
+    }
+  },
+  "run": {
+    "web": "nginx -g 'daemon off;'"
+  },
+  "env": {
+    "FLUTTER_WEB_USE_SKIA": "true",
+    "FLUTTER_WEB_CANVASKIT_URL": "/canvaskit/"
+  },
+  "cache": {
+    "paths": [
+      "/root/.pub-cache",
+      "/app/.dart_tool"
+    ]
+  },
+  "stack": "heroku-24"
+}
