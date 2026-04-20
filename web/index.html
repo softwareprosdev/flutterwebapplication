@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Crypto Mecca Wallet</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; background: #05070D; overflow: hidden; }
@@ -638,10 +639,7 @@
                 </select>
               </div>
               <div class="qr-container">
-                <div class="qr-placeholder" id="qrPlaceholder">
-                  <div class="qr-icon">📱</div>
-                  <p>QR Code</p>
-                </div>
+                <div class="qr-placeholder" id="receiveQR"></div>
               </div>
               <div class="input-group">
                 <label>Your Address</label>
@@ -744,10 +742,7 @@
                 </select>
               </div>
               <div class="qr-container">
-                <div class="qr-placeholder">
-                  <div class="qr-icon">📱</div>
-                  <p>QR Code</p>
-                </div>
+                <div class="qr-placeholder" id="depositQR"></div>
               </div>
               <div class="input-group">
                 <label>Your Deposit Address</label>
@@ -1256,7 +1251,27 @@
 
     function updateReceiveQR() {
       const asset = document.getElementById('receiveAsset').value;
-      document.getElementById('receiveAddress').value = walletAddresses[asset];
+      const address = walletAddresses[asset];
+      document.getElementById('receiveAddress').value = address;
+      
+      // Generate actual QR code
+      const qrContainer = document.getElementById('receiveQR');
+      qrContainer.innerHTML = '';
+      qrContainer.style.padding = '10px';
+      qrContainer.style.background = '#fff';
+      qrContainer.style.borderRadius = '12px';
+      
+      const canvas = document.createElement('canvas');
+      qrContainer.appendChild(canvas);
+      
+      QRCode.toCanvas(canvas, address, {
+        width: 150,
+        margin: 1,
+        color: {
+          dark: '#000000',
+          light: '#ffffff'
+        }
+      });
     }
 
     function copyAddress() {
@@ -1340,9 +1355,26 @@
 
     function updateDepositQR() {
       const asset = document.getElementById('depositAsset').value;
+      const address = walletAddresses[asset];
       const networks = { BTC: 'Bitcoin (BTC)', ETH: 'Ethereum (ERC-20)', SOL: 'Solana (SOL)', DOT: 'Polkadot (DOT)' };
-      document.getElementById('depositAddress').value = walletAddresses[asset];
+      document.getElementById('depositAddress').value = address;
       document.getElementById('depositNetwork').textContent = networks[asset];
+      
+      // Generate QR code
+      const qrContainer = document.getElementById('depositQR');
+      qrContainer.innerHTML = '';
+      qrContainer.style.padding = '10px';
+      qrContainer.style.background = '#fff';
+      qrContainer.style.borderRadius = '12px';
+      
+      const canvas = document.createElement('canvas');
+      qrContainer.appendChild(canvas);
+      
+      QRCode.toCanvas(canvas, address, {
+        width: 150,
+        margin: 1,
+        color: { dark: '#000000', light: '#ffffff' }
+      });
     }
 
     function copyDepositAddress() {
