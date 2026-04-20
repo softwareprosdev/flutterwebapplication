@@ -291,6 +291,28 @@
     .wallet-name { font-weight: 600; color: #FFFFFF; }
     .wallet-address { font-size: 12px; color: #64748B; font-family: monospace; }
     .wallet-balance-sm { font-weight: 600; color: #FFFFFF; text-align: right; }
+    .input-group { margin-bottom: 12px; }
+    .input-group label { display: block; font-size: 12px; color: #94A3B8; margin-bottom: 4px; }
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      background: #05070D;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #FFFFFF;
+      font-size: 16px;
+    }
+    .input-group input:focus { outline: none; border-color: #00E5FF; }
+    .roi-results { display: none; }
+    .roi-results.show { display: block; }
+    .result-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .result-row:last-child { border-bottom: none; }
+    .result-row.highlight { font-weight: 700; font-size: 18px; }
+    .result-row .positive { color: #00FF88; }
+    .result-row .negative { color: #FF4757; }
+    .mining-info .hw-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .hw-hash { color: #94A3B8; margin: 0 12px; }
+    .hw-profit { color: #00FF88; font-weight: 600; }
     .btn-primary {
       background: linear-gradient(135deg, #00E5FF, #00B8D4);
       color: #05070D;
@@ -319,7 +341,7 @@
     </div>
     <div class="app">
       <header>
-        <h2>Crypto Mecca <span style="font-size:10px;color:#64748B;font-weight:400;">v4.0.0</span></h2>
+        <h2>Crypto Mecca <span style="font-size:10px;color:#64748B;font-weight:400;">v3.41.7</span></h2>
         <div class="status">Connected</div>
       </header>
       <div class="tab-content" id="tab-content">
@@ -428,8 +450,68 @@
         </div>
         <div class="tab" id="tab-mining">
           <div class="card">
-            <h3>Mining ROI</h3>
-            <p>Calculate mining profits</p>
+            <h3>Mining ROI Calculator</h3>
+            <div class="input-group">
+              <label>Hash Rate (TH/s)</label>
+              <input type="number" value="100" placeholder="100">
+            </div>
+            <div class="input-group">
+              <label>Power Consumption (W)</label>
+              <input type="number" value="3250" placeholder="3250">
+            </div>
+            <div class="input-group">
+              <label>Electricity Cost ($/kWh)</label>
+              <input type="number" value="0.08" step="0.01" placeholder="0.08">
+            </div>
+            <div class="input-group">
+              <label>Pool Fee (%)</label>
+              <input type="number" value="2" placeholder="2">
+            </div>
+            <button class="btn-primary">Calculate ROI</button>
+          </div>
+          <div class="card roi-results">
+            <div class="result-row">
+              <span>Daily Revenue</span>
+              <span class="positive">$8.45</span>
+            </div>
+            <div class="result-row">
+              <span>Daily Cost</span>
+              <span>$2.40</span>
+            </div>
+            <div class="result-row highlight">
+              <span>Daily Profit</span>
+              <span class="positive">$6.05</span>
+            </div>
+            <div class="result-row">
+              <span>Monthly Profit</span>
+              <span class="positive">$181.50</span>
+            </div>
+            <div class="result-row">
+              <span>Yearly Profit</span>
+              <span class="positive">$2,208.25</span>
+            </div>
+            <div class="result-row">
+              <span>Break-even</span>
+              <span>47 days</span>
+            </div>
+          </div>
+          <div class="card mining-info">
+            <h3>Popular Hardware</h3>
+            <div class="hw-item">
+              <span>Antminer S21 Pro</span>
+              <span class="hw-hash">335 TH/s</span>
+              <span class="hw-profit">$18.50/day</span>
+            </div>
+            <div class="hw-item">
+              <span>Whatsminer M63S</span>
+              <span class="hw-hash">386 TH/s</span>
+              <span class="hw-profit">$21.20/day</span>
+            </div>
+            <div class="hw-item">
+              <span>Antminer S19 XP</span>
+              <span class="hw-hash">140 TH/s</span>
+              <span class="hw-profit">$7.85/day</span>
+            </div>
           </div>
         </div>
         <div class="tab" id="tab-news">
