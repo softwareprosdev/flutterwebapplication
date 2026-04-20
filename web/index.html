@@ -355,6 +355,8 @@
       margin-top: 12px;
     }
     .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-refresh { padding: 8px 16px; background: rgba(0,229,255,0.1); border: 1px solid #00E5FF; border-radius: 8px; color: #00E5FF; font-size: 12px; cursor: pointer; }
+    .btn-secondary { background: rgba(0,229,255,0.1); border: 1px solid #00E5FF; border-radius: 8px; color: #00E5FF; }
     .btn-danger {
       background: rgba(255,71,87,0.2);
       color: #FF4757;
@@ -572,21 +574,20 @@
             </div>
           </div>
           <div class="card mining-info">
-            <h3>Popular Hardware</h3>
-            <div class="hw-item">
-              <span>Antminer S21 Pro</span>
-              <span class="hw-hash">335 TH/s</span>
-              <span class="hw-profit">$18.50/day</span>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <h3>Live Miner Data</h3>
+              <button class="btn-refresh" onclick="loadMiners()">🔄 Refresh</button>
             </div>
-            <div class="hw-item">
-              <span>Whatsminer M63S</span>
-              <span class="hw-hash">386 TH/s</span>
-              <span class="hw-profit">$21.20/day</span>
+            <div id="miners-list">
+              <div class="hw-item">
+                <span>Loading miners...</span>
+                <span class="hw-hash"></span>
+                <span class="hw-profit"></span>
+              </div>
             </div>
-            <div class="hw-item">
-              <span>Antminer S19 XP</span>
-              <span class="hw-hash">140 TH/s</span>
-              <span class="hw-profit">$7.85/day</span>
+            <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)">
+              <p style="font-size:11px;color:#64748B;margin-bottom:8px">Data from asicminervalue.com</p>
+              <button class="btn-secondary" onclick="scrapeAsicValue()" style="width:100%;padding:10px;background:rgba(0,229,255,0.1);border:1px solid #00E5FF;border-radius:8px;color:#00E5FF;cursor:pointer">📡 Scrape Live Data</button>
             </div>
           </div>
         </div>
@@ -858,6 +859,66 @@
       };
       window.open(urls[retailer] || urls.bitmain, '_blank');
     }
+
+    // Load live miners from API
+    async function loadMiners() {
+      const container = document.getElementById('miners-list');
+      container.innerHTML = '<div class="hw-item"><span>Loading miners...</span></div>';
+      
+      try {
+        const res = await fetch('/api/miners');
+        const data = await res.json();
+        
+        if (data.success && data.miners) {
+          let html = '';
+          data.miners.forEach(miner => {
+            const profitClass = miner.profit > 10 ? 'positive' : (miner.profit < 1 ? 'negative' : '');
+            html += `
+              <div class="hw-item" onclick="window.open('${miner.minerUrl}', '_blank')" style="cursor:pointer">
+                <span>${miner.name}</span>
+                <span class="hw-hash">${miner.hash}</span>
+                <span class="hw-profit ${profitClass}">$${miner.profit.toFixed(2)}/day</span>
+              </div>
+            `;
+          });
+          container.innerHTML = html;
+        }
+      } catch (e) {
+        container.innerHTML = '<div class="hw-item"><span style="color:#FF4757">Failed to load miners</span></div>';
+      }
+    }
+
+    // Scrape asicminervalue.com using server API
+    async function scrapeAsicValue() {
+      const btn = event.target;
+      btn.textContent = '⏳ Scraping...';
+      btn.disabled = true;
+      
+      try {
+        const res = await fetch('/api/scrape', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: 'https://www.asicminervalue.com/miners/bitmain/antminer-s23-hydro-u3-1160th' })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          alert('Scraping successful! Data: ' + (data.data?.markdown?.substring(0, 200) || 'No data'));
+        } else {
+          alert('Scraping failed: ' + data.error);
+        }
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+      
+      btn.textContent = '📡 Scrape Live Data';
+      btn.disabled = false;
+    }
+
+    // Load miners on page load
+    window.addEventListener('load', function() {
+      loadMiners();
+    });
   </script>
 </body>
 </html>

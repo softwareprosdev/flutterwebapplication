@@ -1,0 +1,68 @@
+{
+  "miners": [
+    {
+      "name": "Antminer S21 Pro",
+      "hash": "335 TH/s",
+      "power": "5340W",
+      "price": 3299,
+      "profit": 12.45,
+      "url": "https://www.asicminervalue.com/miners/bitmain/antminer-s21-pro-335th"
+    },
+    {
+      "name": "Antminer S23 Hydro",
+      "hash": "1160 TH/s",
+      "power": "17600W",
+      "price": 8999,
+      "profit": 48.92,
+      "url": "https://www.asicminervalue.com/miners/bitmain/antminer-s23-hydro-1160th"
+    },
+    {
+      "name": "Whatsminer M63S",
+      "hash": "386 TH/s",
+      "power": "7155W",
+      "price": 2850,
+      "profit": 14.21,
+      "url": "https://www.asicminervalue.com/miners/microbt/whatsminer-m63s-386th"
+    },
+    {
+      "name": "Whatsminer M66S",
+      "hash": "456 TH/s",
+      "power": "8520W",
+      "price": 3200,
+      "profit": 16.88,
+      "url": "https://www.asicminervalue.com/miners/microbt/whatsminer-m66s-456th"
+    },
+    {
+      "name": "AvalonMiner A1466",
+      "hash": "170 TH/s",
+      "power": "3300W",
+      "price": 2099,
+      "profit": 6.34,
+      "url": "https://www.asicminervalue.com/miners/canaan/avalonminer-a1466-170th"
+    },
+    {
+      "name": "Goldshell KD6",
+      "hash": "26.3 TH/s",
+      "power": "2630W",
+      "price": 1250,
+      "profit": 0.89,
+      "url": "https://www.asicminervalue.com/miners/goldshell/kd6-26th"
+    },
+    {
+      "name": "iBeLink BM-K3",
+      "hash": "9.4 TH/s",
+      "power": "3400W",
+      "price": 3499,
+      "profit": 0.32,
+      "url": "https://www.asicminervalue.com/miners/ibelink/bm-k3"
+    },
+    {
+      "name": "Antminer T21",
+      "hash": "360 TH/s",
+      "power": "7180W",
+      "price": 2499,
+      "profit": 13.45,
+      "url": "https://www.asicminervalue.com/miners/bitmain/antminer-t21-360th"
+    }
+  ]
+}
